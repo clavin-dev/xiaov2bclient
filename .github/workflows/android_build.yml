@@ -22,7 +22,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.27.1' # Using a recent stable version
+          flutter-version: '3.38.3' # Match user's local version
 
       - name: Get dependencies
         run: flutter pub get
