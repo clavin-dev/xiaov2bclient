@@ -1,0 +1,30 @@
+# 打包配置文件
+# 使用方法: 修改此文件后，运行 `dart tool/apply_config.dart` 应用更改
+
+# 应用名称 (显示在手机桌面、窗口标题、任务管理器中的名字)
+app_name: "春秋VPN"
+
+# 进程名称 (仅限 Windows/Linux，生成的 .exe 文件名)
+# 注意：修改此项后，建议运行 flutter clean
+process_name: "chunqiu_vpn"
+
+# Logo 配置
+# 请将您的 Logo 图片放在 assets/images/ 目录下 (如果没有该目录请新建)
+# 建议使用 1024x1024 的 PNG 图片作为源文件
+logo:
+  # 源图片路径
+  image_path: "assets/images/logo.png"
+  
+  # 是否生成 Android 图标
+  android: true
+  
+  # 是否生成 iOS 图标
+  ios: true
+  
+  # (可选) 自定义 Android 图标文件名，默认是 ic_launcher
+  # android_icon_name: "ic_launcher" 
+
+# 注意：
+# 1. 修改完配置后，请确保 image_path 指定的图片存在。
+# 2. 在终端运行: dart tool/apply_config.dart
+# 3. 然后运行: flutter build apk --release

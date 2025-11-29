@@ -1,0 +1,106 @@
+name: Build All Platforms
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  # ===========================================================================
+  # Android Build
+  # ===========================================================================
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.38.3'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Apply Build Configuration (Name, Logo)
+        run: dart tool/apply_config.dart
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # ===========================================================================
+  # Windows Build
+  # ===========================================================================
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.38.3'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Apply Build Configuration (Name, Logo, Process Name)
+        run: dart tool/apply_config.dart
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      - name: Compress Windows Release
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath windows-release.zip
+
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release-zip
+          path: windows-release.zip
+
+  # ===========================================================================
+  # macOS Build
+  # ===========================================================================
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.38.3'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Apply Build Configuration (Name, Logo)
+        run: dart tool/apply_config.dart
+
+      - name: Build macOS
+        run: flutter build macos --release
+
+      - name: Compress macOS Release
+        run: |
+          cd build/macos/Build/Products/Release
+          tar -czf ../../../../../macos-release.tar.gz *.app
+
+      - name: Upload macOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release-app
+          path: macos-release.tar.gz
