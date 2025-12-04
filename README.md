@@ -108,10 +108,6 @@ flutter build macos --release
 flutter build ios --release
 ```
 
-### Web
-```bash
-flutter build web --release
-```
 
 ## 📁 项目结构
 
